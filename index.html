@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DPRES — Disaster Preparedness & Response Education System</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fire: #E8431A;
+    --fire-dark: #B52F0A;
+    --fire-light: #FFE8DF;
+    --amber: #F5A623;
+    --amber-light: #FFF3D6;
+    --teal: #0D9B7A;
+    --teal-light: #D6F5EC;
+    --navy: #0B1C35;
+    --navy-mid: #132847;
+    --blue-muted: #1E3A5F;
+    --slate: #4A6280;
+    --text: #0B1C35;
+    --muted: #5A6E85;
+    --bg: #F7F4EF;
+    --white: #FFFFFF;
+    --card-bg: #FFFFFF;
+    --border: rgba(11,28,53,0.1);
+    --radius: 16px;
+    --radius-sm: 8px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(11,28,53,0.96);
+    backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 68px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo .icon {
+    width: 36px; height: 36px;
+    background: var(--fire);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .nav-logo span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: white;
+    letter-spacing: -0.3px;
+  }
+  .nav-logo span b { color: var(--fire); }
+  .nav-links {
+    display: flex; gap: 32px; list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: white; }
+  .nav-cta {
+    background: var(--fire);
+    color: white;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: var(--fire-dark); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: var(--navy);
+    position: relative;
+    display: flex; align-items: center;
+    padding: 120px 5% 80px;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative; z-index: 2;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(232,67,26,0.15);
+    border: 1px solid rgba(232,67,26,0.3);
+    color: #FF8060;
+    padding: 5px 14px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero-badge::before { content: '●'; font-size: 8px; animation: blink 1.4s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(38px, 4.5vw, 62px);
+    font-weight: 800;
+    line-height: 1.05;
+    color: white;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+  }
+  .hero h1 span { color: var(--fire); }
+  .hero p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    max-width: 460px;
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--fire);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--fire-dark); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent;
+    color: rgba(255,255,255,0.75);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.5); color: white; }
+  .hero-stats {
+    display: flex; gap: 32px; margin-top: 44px;
+  }
+  .hero-stat .num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px; font-weight: 700;
+    color: white;
+  }
+  .hero-stat .label {
+    font-size: 12px; color: rgba(255,255,255,0.4);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  /* Hero Visual */
+  .hero-visual {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hex-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    max-width: 380px;
+  }
+  .hex-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 22px 16px;
+    text-align: center;
+    transition: transform 0.3s, background 0.3s;
+    cursor: pointer;
+    animation: floatIn 0.6s ease both;
+  }
+  .hex-card:nth-child(1){animation-delay:0.1s}
+  .hex-card:nth-child(2){animation-delay:0.2s}
+  .hex-card:nth-child(3){animation-delay:0.3s}
+  .hex-card:nth-child(4){animation-delay:0.4s}
+  .hex-card:nth-child(5){animation-delay:0.05s}
+  .hex-card:nth-child(6){animation-delay:0.25s}
+  @keyframes floatIn {
+    from { opacity:0; transform: translateY(20px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  .hex-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.1); }
+  .hex-card .emoji { font-size: 28px; margin-bottom: 8px; display: block; }
+  .hex-card .name { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 400; }
+  .hex-card.active { background: rgba(232,67,26,0.2); border-color: rgba(232,67,26,0.4); }
+  .hex-card.active .name { color: #FF9070; }
+
+  /* BG decor */
+  .hero-decor {
+    position: absolute; inset: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-decor::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,67,26,0.12) 0%, transparent 70%);
+    top: -100px; right: -100px;
+  }
+  .hero-decor::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(13,155,122,0.1) 0%, transparent 70%);
+    bottom: -50px; left: 10%;
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 90px 5%; }
+  .section-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--fire);
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 3vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    color: var(--navy);
+    margin-bottom: 14px;
+    line-height: 1.15;
+  }
+  .section-sub {
+    font-size: 16px; color: var(--muted);
+    max-width: 520px; line-height: 1.65;
+    font-weight: 300;
+  }
+  .section-header { margin-bottom: 48px; }
+
+  /* ── MODULES ── */
+  .modules { background: var(--bg); }
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .module-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 28px;
+    border: 1px solid var(--border);
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .module-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent, var(--fire));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .module-card:hover::before { transform: scaleX(1); }
+  .module-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(11,28,53,0.1); }
+  .module-icon {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    margin-bottom: 18px;
+  }
+  .module-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px; font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .module-card p {
+    font-size: 14px; color: var(--muted);
+    line-height: 1.6; font-weight: 300;
+  }
+  .module-meta {
+    display: flex; align-items: center; gap: 16px;
+    margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px; color: var(--muted);
+  }
+  .module-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* ── ALERTS TICKER ── */
+  .alert-bar {
+    background: var(--navy-mid);
+    padding: 12px 5%;
+    display: flex; align-items: center; gap: 16px;
+    overflow: hidden;
+  }
+  .alert-label {
+    background: var(--fire);
+    color: white;
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 4px;
+    letter-spacing: 1px; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .ticker-wrap { overflow: hidden; flex: 1; }
+  .ticker-track {
+    display: flex; gap: 60px;
+    white-space: nowrap;
+    animation: ticker 30s linear infinite;
+    color: rgba(255,255,255,0.55);
+    font-size: 13px;
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── DISASTER TYPES ── */
+  .disasters { background: var(--navy); }
+  .disasters .section-title { color: white; }
+  .disasters .section-sub { color: rgba(255,255,255,0.45); }
+  .disasters .section-label { color: var(--amber); }
+  .disaster-tabs {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .dtab {
+    padding: 8px 18px;
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.5);
+    font-size: 13px; cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .dtab.active, .dtab:hover {
+    background: var(--fire); border-color: var(--fire);
+    color: white;
+  }
+  .disaster-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+  .disaster-info {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 32px;
+  }
+  .disaster-info h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 700;
+    color: white; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .disaster-info p {
+    color: rgba(255,255,255,0.5);
+    font-size: 15px; line-height: 1.7; font-weight: 300;
+    margin-bottom: 20px;
+  }
+  .response-steps { list-style: none; }
+  .response-steps li {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.65);
+    font-size: 14px;
+  }
+  .step-num {
+    min-width: 24px; height: 24px;
+    background: var(--fire);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; color: white;
+    flex-shrink: 0;
+  }
+  .severity-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .sev-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .sev-label { font-size: 11px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .sev-value { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: white; }
+  .sev-bar {
+    height: 4px; border-radius: 2px;
+    background: rgba(255,255,255,0.08);
+    margin-top: 8px; overflow: hidden;
+  }
+  .sev-fill { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
+
+  /* ── COURSES ── */
+  .courses { background: var(--bg); }
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .course-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: pointer;
+  }
+  .course-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(11,28,53,0.12); }
+  .course-thumb {
+    height: 160px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .course-body { padding: 20px; }
+  .course-tags { display: flex; gap: 6px; margin-bottom: 10px; }
+  .tag {
+    font-size: 11px; font-weight: 500;
+    padding: 3px 10px; border-radius: 50px;
+  }
+  .tag-fire { background: var(--fire-light); color: var(--fire-dark); }
+  .tag-teal { background: var(--teal-light); color: #0A6B54; }
+  .tag-amber { background: var(--amber-light); color: #8B5E00; }
+  .course-body h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px; font-weight: 600;
+    color: var(--navy); margin-bottom: 6px;
+  }
+  .course-body p {
+    font-size: 13px; color: var(--muted);
+    line-height: 1.55; font-weight: 300;
+    margin-bottom: 14px;
+  }
+  .course-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 12px; border-top: 1px solid var(--border);
+  }
+  .course-info { font-size: 12px; color: var(--muted); }
+  .enroll-btn {
+    background: var(--navy);
+    color: white;
+    border: none;
+    padding: 7px 16px;
+    border-radius: 6px;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .enroll-btn:hover { background: var(--fire); }
+
+  /* ── EMERGENCY PROTOCOLS ── */
+  .protocols {
+    background: linear-gradient(135deg, #FFF8F5 0%, #F7F4EF 100%);
+    position: relative;
+  }
+  .protocol-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .protocol-step {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    border: 1px solid var(--border);
+    position: relative;
+    transition: transform 0.2s;
+  }
+  .protocol-step:hover { transform: translateY(-3px); }
+  .p-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 48px; font-weight: 800;
+    color: rgba(232,67,26,0.08);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .p-icon { font-size: 24px; margin-bottom: 10px; display: block; }
+  .protocol-step h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--navy); margin-bottom: 6px;
+  }
+  .protocol-step p { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+  .connector {
+    position: absolute;
+    top: 50%; right: -24px;
+    width: 24px; height: 2px;
+    background: rgba(232,67,26,0.2);
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+
+  /* ── RESOURCES ── */
+  .resources { background: white; }
+  .resources-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .resource-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 20px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .resource-item:hover { border-color: var(--fire); transform: translateX(4px); }
+  .r-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .resource-item h4 {
+    font-size: 14px; font-weight: 500;
+    color: var(--navy); margin-bottom: 4px;
+  }
+  .resource-item p { font-size: 13px; color: var(--muted); font-weight: 300; }
+  .r-badge {
+    margin-left: auto; flex-shrink: 0;
+    font-size: 11px; padding: 3px 8px;
+    border-radius: 4px;
+    align-self: flex-start;
+  }
+
+  /* ── QUIZ SECTION ── */
+  .quiz-section { background: var(--navy); }
+  .quiz-section .section-title { color: white; }
+  .quiz-section .section-sub { color: rgba(255,255,255,0.45); }
+  .quiz-section .section-label { color: var(--amber); }
+  .quiz-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 36px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .quiz-progress {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 28px;
+  }
+  .quiz-progress-bar {
+    flex: 1; height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px; overflow: hidden;
+  }
+  .quiz-progress-fill {
+    height: 100%; background: var(--fire);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+  .quiz-count { font-size: 13px; color: rgba(255,255,255,0.35); white-space: nowrap; }
+  .quiz-question {
+    font-family: 'Syne', sans-serif;
+    font-size: 19px; font-weight: 600;
+    color: white; line-height: 1.4;
+    margin-bottom: 24px;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    padding: 14px 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.6);
+    font-size: 14px; cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .quiz-opt:hover { border-color: rgba(255,255,255,0.3); color: white; background: rgba(255,255,255,0.05); }
+  .quiz-opt.correct { border-color: var(--teal); background: rgba(13,155,122,0.15); color: #6FE8C8; }
+  .quiz-opt.wrong { border-color: var(--fire); background: rgba(232,67,26,0.12); color: #FF8060; }
+  .quiz-feedback {
+    margin-top: 16px; padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14px; line-height: 1.5;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(13,155,122,0.12); color: #6FE8C8; border: 1px solid rgba(13,155,122,0.2); }
+  .quiz-feedback.wrong { background: rgba(232,67,26,0.1); color: #FF8060; border: 1px solid rgba(232,67,26,0.2); }
+  .quiz-nav {
+    display: flex; justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--fire);
+    padding: 80px 5%;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .cta-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(26px, 3.5vw, 44px);
+    font-weight: 800;
+    color: white;
+    margin-bottom: 14px;
+    letter-spacing: -0.8px;
+    position: relative; z-index: 1;
+  }
+  .cta-section p { color: rgba(255,255,255,0.75); font-size: 16px; margin-bottom: 30px; font-weight: 300; position: relative; z-index: 1; }
+  .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+  .btn-white {
+    background: white; color: var(--fire);
+    border: none; padding: 14px 28px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 500;
+    cursor: pointer; transition: transform 0.2s;
+  }
+  .btn-white:hover { transform: translateY(-2px); }
+  .btn-ghost-white {
+    background: transparent; color: white;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    padding: 14px 28px; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .btn-ghost-white:hover { border-color: white; transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    padding: 60px 5% 32px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 48px;
+  }
+  .footer-brand p {
+    font-size: 14px; color: rgba(255,255,255,0.35);
+    line-height: 1.6; font-weight: 300;
+    margin-top: 12px; max-width: 240px;
+  }
+  .footer-col h5 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.5px; margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 14px; color: rgba(255,255,255,0.45);
+    text-decoration: none; margin-bottom: 8px;
+    transition: color 0.2s; font-weight: 300;
+  }
+  .footer-col a:hover { color: white; }
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 13px; color: rgba(255,255,255,0.25);
+  }
+  .emergency-badge {
+    background: var(--fire);
+    color: white;
+    padding: 4px 12px; border-radius: 50px;
+    font-size: 12px; font-weight: 500;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  /* ── SCROLL ANIMATION ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hex-grid { display: none; }
+    .disaster-content { grid-template-columns: 1fr; }
+    .resources-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    .hero h1 { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="icon">🚨</div>
+    <span><b>DPRES</b> — EduSystem</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#modules">Modules</a></li>
+    <li><a href="#disasters">Disasters</a></li>
+    <li><a href="#courses">Courses</a></li>
+    <li><a href="#protocols">Protocols</a></li>
+    <li><a href="#resources">Resources</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">Take Quiz</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-decor"></div>
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-badge">Active Learning Platform</div>
+      <h1>Be Ready.<br><span>Save Lives.</span><br>Know More.</h1>
+      <p>A comprehensive disaster preparedness and emergency response education system built for schools and colleges across India. Learn, simulate, and respond.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Explore Courses</button>
+        <button class="btn-outline" onclick="document.getElementById('protocols').scrollIntoView({behavior:'smooth'})">Emergency Protocols</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="num">12+</div>
+          <div class="label">Disaster Types</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">48</div>
+          <div class="label">Training Modules</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">5K+</div>
+          <div class="label">Students Trained</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hex-grid">
+        <div class="hex-card active">
+          <span class="emoji">🌊</span>
+          <div class="name">Flood</div>
+        </div>
+        <div class="hex-card">
+          <span class="emoji">🔥</span>
+          <div class="name">Wildfire</div>
+        </div>
+        <div class="hex-card">
+          <span class="emoji">🌀</span>
+          <div class="name">Cyclone</div>
+        </div>
+        <div class="hex-card">
+          <span class="emoji">⚡</span>
+          <div class="name">Lightning</div>
+        </div>
+        <div class="hex-card">
+          <span class="emoji">🏔️</span>
+          <div class="name">Landslide</div>
+        </div>
+        <div class="hex-card">
+          <span class="emoji">🌍</span>
+          <div class="name">Earthquake</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALERT TICKER -->
+<div class="alert-bar">
+  <div class="alert-label">⚠ Alert</div>
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span>🌊 Flood Advisory issued for Coastal Andhra Pradesh — Keep emergency kit ready</span>
+      <span>🔥 Forest fire risk HIGH in Uttarakhand hills — Avoid open burning</span>
+      <span>🌀 Cyclone Watch: Bay of Bengal — NDRF teams on standby</span>
+      <span>📚 New Module: Chemical Hazards Response — Now Available</span>
+      <span>🏆 Mock Drill: All schools to conduct evacuation drill this Friday</span>
+      <span>🌊 Flood Advisory issued for Coastal Andhra Pradesh — Keep emergency kit ready</span>
+      <span>🔥 Forest fire risk HIGH in Uttarakhand hills — Avoid open burning</span>
+      <span>🌀 Cyclone Watch: Bay of Bengal — NDRF teams on standby</span>
+      <span>📚 New Module: Chemical Hazards Response — Now Available</span>
+      <span>🏆 Mock Drill: All schools to conduct evacuation drill this Friday</span>
+    </div>
+  </div>
+</div>
+
+<!-- MODULES -->
+<section class="modules" id="modules">
+  <div class="section-header reveal">
+    <div class="section-label">Core Curriculum</div>
+    <h2 class="section-title">Learning Modules</h2>
+    <p class="section-sub">From awareness to advanced response — structured education for every level.</p>
+  </div>
+  <div class="modules-grid">
+    <div class="module-card reveal" style="--accent: #E8431A;">
+      <div class="module-icon" style="background:#FFE8DF;">🚒</div>
+      <h3>Emergency Response Basics</h3>
+      <p>First-response actions, triage fundamentals, and emergency service coordination during crisis events.</p>
+      <div class="module-meta">
+        <span>📖 8 Lessons</span>
+        <span>⏱ 2.5 hrs</span>
+        <span>🟢 Beginner</span>
+      </div>
+    </div>
+    <div class="module-card reveal" style="--accent: #0D9B7A;">
+      <div class="module-icon" style="background:#D6F5EC;">🩺</div>
+      <h3>First Aid & Medical Response</h3>
+      <p>CPR, wound management, shock treatment, and dealing with injuries in disaster scenarios.</p>
+      <div class="module-meta">
+        <span>📖 12 Lessons</span>
+        <span>⏱ 4 hrs</span>
+        <span>🟡 Intermediate</span>
+      </div>
+    </div>
+    <div class="module-card reveal" style="--accent: #F5A623;">
+      <div class="module-icon" style="background:#FFF3D6;">🏗️</div>
+      <h3>Structural Safety & Evacuation</h3>
+      <p>Building safety assessments, evacuation route planning, and campus-wide drill coordination.</p>
+      <div class="module-meta">
+        <span>📖 10 Lessons</span>
+        <span>⏱ 3 hrs</span>
+        <span>🟡 Intermediate</span>
+      </div>
+    </div>
+    <div class="module-card reveal" style="--accent: #3B6BDD;">
+      <div class="module-icon" style="background:#E5EDFF;">📡</div>
+      <h3>Communication & Coordination</h3>
+      <p>Emergency communication systems, distress signals, radio protocols, and incident command structures.</p>
+      <div class="module-meta">
+        <span>📖 6 Lessons</span>
+        <span>⏱ 2 hrs</span>
+        <span>🟢 Beginner</span>
+      </div>
+    </div>
+    <div class="module-card reveal" style="--accent: #8B49D4;">
+      <div class="module-icon" style="background:#F0E6FF;">🧠</div>
+      <h3>Psychological First Aid</h3>
+      <p>Mental health support strategies, trauma counselling basics, and community resilience building.</p>
+      <div class="module-meta">
+        <span>📖 9 Lessons</span>
+        <span>⏱ 3.5 hrs</span>
+        <span>🔴 Advanced</span>
+      </div>
+    </div>
+    <div class="module-card reveal" style="--accent: #1AA3A3;">
+      <div class="module-icon" style="background:#D6F5F5;">🌏</div>
+      <h3>Climate & Environmental Hazards</h3>
+      <p>Understanding climate-induced disasters, environmental monitoring, and long-term preparedness strategies.</p>
+      <div class="module-meta">
+        <span>📖 11 Lessons</span>
+        <span>⏱ 4.5 hrs</span>
+        <span>🔴 Advanced</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISASTER TYPES -->
+<section class="disasters" id="disasters">
+  <div class="section-header reveal">
+    <div class="section-label">Know Your Hazards</div>
+    <h2 class="section-title">Disaster Response Guides</h2>
+    <p class="section-sub">Detailed response protocols for every major disaster type relevant to India.</p>
+  </div>
+  <div class="disaster-tabs reveal" id="disasterTabs">
+    <button class="dtab active" onclick="showDisaster(0)">🌊 Flood</button>
+    <button class="dtab" onclick="showDisaster(1)">🌍 Earthquake</button>
+    <button class="dtab" onclick="showDisaster(2)">🌀 Cyclone</button>
+    <button class="dtab" onclick="showDisaster(3)">🔥 Fire</button>
+    <button class="dtab" onclick="showDisaster(4)">☢️ Chemical</button>
+  </div>
+  <div class="disaster-content reveal" id="disasterContent">
+    <!-- JS filled -->
+  </div>
+</section>
+
+<!-- COURSES -->
+<section class="courses" id="courses">
+  <div class="section-header reveal">
+    <div class="section-label">Certified Programs</div>
+    <h2 class="section-title">Featured Courses</h2>
+    <p class="section-sub">Structured learning paths designed for students, faculty, and first responders.</p>
+  </div>
+  <div class="courses-grid">
+    <div class="course-card reveal">
+      <div class="course-thumb" style="background:linear-gradient(135deg,#FFE0D8,#FFCABB);">🏫</div>
+      <div class="course-body">
+        <div class="course-tags">
+          <span class="tag tag-fire">School</span>
+          <span class="tag tag-teal">Certified</span>
+        </div>
+        <h3>School Safety & Disaster Preparedness</h3>
+        <p>Equip school students and teachers with life-saving skills and standardized emergency response procedures.</p>
+        <div class="course-footer">
+          <div class="course-info">24 hrs · 6 modules · Certificate</div>
+          <button class="enroll-btn">Enroll Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="course-card reveal">
+      <div class="course-thumb" style="background:linear-gradient(135deg,#D6F5EC,#B8EDDE);">🏛️</div>
+      <div class="course-body">
+        <div class="course-tags">
+          <span class="tag tag-teal">College</span>
+          <span class="tag tag-amber">Advanced</span>
+        </div>
+        <h3>Campus Emergency Response Team (CERT)</h3>
+        <p>Train college volunteers to be the first line of defense in campus disaster response and evacuation leadership.</p>
+        <div class="course-footer">
+          <div class="course-info">40 hrs · 8 modules · CERT Badge</div>
+          <button class="enroll-btn">Enroll Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="course-card reveal">
+      <div class="course-thumb" style="background:linear-gradient(135deg,#FFF0CC,#FFDFA0);">👩‍🏫</div>
+      <div class="course-body">
+        <div class="course-tags">
+          <span class="tag tag-amber">Faculty</span>
+          <span class="tag tag-fire">Leadership</span>
+        </div>
+        <h3>Teacher Emergency Response Leadership</h3>
+        <p>Train educators to lead disaster drills, manage mass evacuation, and coordinate with local emergency services.</p>
+        <div class="course-footer">
+          <div class="course-info">16 hrs · 4 modules · TOT Cert.</div>
+          <button class="enroll-btn">Enroll Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="course-card reveal">
+      <div class="course-thumb" style="background:linear-gradient(135deg,#E5EDFF,#C8D9FF);">🩺</div>
+      <div class="course-body">
+        <div class="course-tags">
+          <span class="tag tag-teal">Medical</span>
+          <span class="tag tag-teal">Certified</span>
+        </div>
+        <h3>Advanced First Aid & Mass Casualty Response</h3>
+        <p>Comprehensive first aid including mass casualty triage, hemorrhage control, airway management for campus medics.</p>
+        <div class="course-footer">
+          <div class="course-info">32 hrs · 7 modules · AFAC Cert.</div>
+          <button class="enroll-btn">Enroll Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="course-card reveal">
+      <div class="course-thumb" style="background:linear-gradient(135deg,#F0E6FF,#DDD0FF);">📱</div>
+      <div class="course-body">
+        <div class="course-tags">
+          <span class="tag tag-fire">Digital</span>
+          <span class="tag tag-amber">New</span>
+        </div>
+        <h3>Digital Tools for Emergency Management</h3>
+        <p>Use apps, GIS mapping, social media, and digital communication tools effectively during disaster response.</p>
+        <div class="course-footer">
+          <div class="course-info">12 hrs · 3 modules · e-Certificate</div>
+          <button class="enroll-btn">Enroll Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="course-card reveal">
+      <div class="course-thumb" style="background:linear-gradient(135deg,#D6F5F5,#AAEAEA);">🏘️</div>
+      <div class="course-body">
+        <div class="course-tags">
+          <span class="tag tag-teal">Community</span>
+          <span class="tag tag-teal">NSS/NCC</span>
+        </div>
+        <h3>Community Disaster Risk Reduction</h3>
+        <p>Build community resilience through outreach programs, village-level drills, and disaster risk mapping activities.</p>
+        <div class="course-footer">
+          <div class="course-info">20 hrs · 5 modules · DRR Cert.</div>
+          <button class="enroll-btn">Enroll Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROTOCOLS -->
+<section class="protocols" id="protocols">
+  <div class="section-header reveal">
+    <div class="section-label">Standard Operating Procedures</div>
+    <h2 class="section-title">Emergency Action Protocol</h2>
+    <p class="section-sub">Follow these five universal steps whenever a disaster strikes your campus.</p>
+  </div>
+  <div class="protocol-grid">
+    <div class="protocol-step reveal" style="position:relative;">
+      <div class="p-number">01</div>
+      <span class="p-icon">🔔</span>
+      <h4>Alert & Warn</h4>
+      <p>Activate emergency alarm system immediately. Use PA announcements, SMS alerts, and designated warning signals.</p>
+      <div class="connector"></div>
+    </div>
+    <div class="protocol-step reveal" style="position:relative;">
+      <div class="p-number">02</div>
+      <span class="p-icon">🧑‍🤝‍🧑</span>
+      <h4>Assemble & Evacuate</h4>
+      <p>Move to pre-designated assembly points. Teachers lead students. Account for all individuals in the roll call.</p>
+      <div class="connector"></div>
+    </div>
+    <div class="protocol-step reveal" style="position:relative;">
+      <div class="p-number">03</div>
+      <span class="p-icon">📞</span>
+      <h4>Communicate</h4>
+      <p>Contact emergency services (112). Report status to incident commander. Inform parents and administration.</p>
+      <div class="connector"></div>
+    </div>
+    <div class="protocol-step reveal" style="position:relative;">
+      <div class="p-number">04</div>
+      <span class="p-icon">🩺</span>
+      <h4>First Aid & Triage</h4>
+      <p>Trained CERT members provide immediate first aid. Prioritize casualties. Await professional medical support.</p>
+      <div class="connector"></div>
+    </div>
+    <div class="protocol-step reveal">
+      <div class="p-number">05</div>
+      <span class="p-icon">📋</span>
+      <h4>Document & Recover</h4>
+      <p>Record all actions taken, injuries, and damages. Begin incident debrief. Initiate psychological first aid.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section class="resources" id="resources">
+  <div class="section-header reveal">
+    <div class="section-label">Downloadable Materials</div>
+    <h2 class="section-title">Educational Resources</h2>
+    <p class="section-sub">Free toolkits, posters, checklists, and manuals for schools and colleges.</p>
+  </div>
+  <div class="resources-grid reveal">
+    <div class="resource-item">
+      <div class="r-icon" style="background:#FFE8DF;">📋</div>
+      <div>
+        <h4>Campus Disaster Preparedness Checklist</h4>
+        <p>Complete audit checklist for school administrators — 80 point assessment</p>
+      </div>
+      <span class="r-badge" style="background:var(--fire-light);color:var(--fire-dark);">PDF</span>
+    </div>
+    <div class="resource-item">
+      <div class="r-icon" style="background:#D6F5EC;">🗺️</div>
+      <div>
+        <h4>Campus Evacuation Map Template</h4>
+        <p>Editable floor plan templates with emergency exit and assembly zone markers</p>
+      </div>
+      <span class="r-badge" style="background:var(--teal-light);color:#0A6B54;">PPT</span>
+    </div>
+    <div class="resource-item">
+      <div class="r-icon" style="background:#FFF3D6;">🚑</div>
+      <div>
+        <h4>First Aid Quick Reference Cards</h4>
+        <p>Laminated pocket cards for CPR, burns, fractures, and choking — 20 card set</p>
+      </div>
+      <span class="r-badge" style="background:var(--amber-light);color:#8B5E00;">Free</span>
+    </div>
+    <div class="resource-item">
+      <div class="r-icon" style="background:#E5EDFF;">📻</div>
+      <div>
+        <h4>Emergency Communication SOP Manual</h4>
+        <p>Standard operating procedures for emergency communication at institutional level</p>
+      </div>
+      <span class="r-badge" style="background:var(--fire-light);color:var(--fire-dark);">PDF</span>
+    </div>
+    <div class="resource-item">
+      <div class="r-icon" style="background:#F0E6FF;">🎯</div>
+      <div>
+        <h4>Mock Drill Planning Guide</h4>
+        <p>Step-by-step guide to conduct, evaluate, and debrief disaster drills for schools</p>
+      </div>
+      <span class="r-badge" style="background:var(--teal-light);color:#0A6B54;">Free</span>
+    </div>
+    <div class="resource-item">
+      <div class="r-icon" style="background:#D6F5F5;">🌧️</div>
+      <div>
+        <h4>Flood & Cyclone Season Preparedness Kit</h4>
+        <p>Seasonal readiness toolkit with weather alerts, supply lists, and family plans</p>
+      </div>
+      <span class="r-badge" style="background:var(--amber-light);color:#8B5E00;">ZIP</span>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section class="quiz-section" id="quiz">
+  <div class="section-header reveal" style="text-align:center;">
+    <div class="section-label">Test Your Knowledge</div>
+    <h2 class="section-title">Quick Assessment Quiz</h2>
+    <p class="section-sub" style="margin:0 auto;">See how prepared you are with our interactive disaster response quiz.</p>
+  </div>
+  <div class="quiz-box reveal" id="quizBox">
+    <div class="quiz-progress">
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="qFill" style="width:20%"></div></div>
+      <div class="quiz-count" id="qCount">1 / 5</div>
+    </div>
+    <div class="quiz-question" id="qQuestion"></div>
+    <div class="quiz-options" id="qOptions"></div>
+    <div class="quiz-feedback" id="qFeedback"></div>
+    <div class="quiz-nav">
+      <button class="btn-primary" id="qNext" style="display:none;" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Ready to Build a<br>Disaster-Resilient Campus?</h2>
+  <p>Join thousands of schools and colleges already using DPRES to protect their communities.</p>
+  <div class="cta-btns">
+    <button class="btn-white">Register Your Institution</button>
+    <button class="btn-ghost-white">Download Curriculum Guide</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="#" style="text-decoration:none;">
+        <div class="icon">🚨</div>
+        <span style="font-family:Syne,sans-serif;font-weight:700;font-size:18px;color:white;letter-spacing:-0.3px;"><b style="color:var(--fire)">DPRES</b> — EduSystem</span>
+      </a>
+      <p>Disaster Preparedness & Response Education System — empowering India's educational institutions to save lives through knowledge.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Programs</h5>
+      <a href="#">School Safety</a>
+      <a href="#">College CERT</a>
+      <a href="#">Faculty Training</a>
+      <a href="#">NSS / NCC Modules</a>
+    </div>
+    <div class="footer-col">
+      <h5>Resources</h5>
+      <a href="#">Course Library</a>
+      <a href="#">Downloads</a>
+      <a href="#">Video Tutorials</a>
+      <a href="#">Mock Drill Kits</a>
+    </div>
+    <div class="footer-col">
+      <h5>Emergency</h5>
+      <a href="#">Police — 100</a>
+      <a href="#">Ambulance — 108</a>
+      <a href="#">Fire — 101</a>
+      <a href="#">NDMA — 1078</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 DPRES EduSystem · Built for India's Schools & Colleges</span>
+    <div class="emergency-badge">📞 Emergency: 112</div>
+  </div>
+</footer>
+
+<script>
+/* Disaster Data */
+const disasters = [
+  {
+    name: "🌊 Flood Response", desc: "Floods are the most common disaster in India, affecting millions annually. Understanding flood response is critical for all students.",
+    steps: ["Move immediately to higher ground or upper floors", "Avoid walking/driving through floodwater", "Turn off electricity at main switch if safe", "Emergency kit: water, medicines, documents in waterproof bag", "Signal for rescue if stranded — do not attempt to swim"],
+    stats: [{ label: "Annual Events", val: "150+", pct: 85 }, { label: "States Affected", val: "22", pct: 60 }, { label: "Avg Warning Time", val: "48 hrs", pct: 55 }, { label: "Survival Rate w/ Training", val: "94%", pct: 94 }],
+    colors: ["#3B82F6","#60A5FA","#2563EB","#1D4ED8"]
+  },
+  {
+    name: "🌍 Earthquake Response", desc: "Seismic activity affects multiple zones in India. Quick, correct response in the first 60 seconds determines survival outcomes.",
+    steps: ["DROP, COVER, HOLD — under table or against interior wall", "Stay away from windows, exterior walls, and heavy furniture", "Do NOT run outside during shaking — most injuries from falling debris", "After shaking stops — check for injuries, gas leaks, structural damage", "Expect aftershocks — prepare to re-evacuate"],
+    stats: [{ label: "Seismic Zones", val: "Zone V", pct: 90 }, { label: "Response Time Critical", val: "60 sec", pct: 70 }, { label: "States High Risk", val: "12", pct: 48 }, { label: "Preparedness Impact", val: "+70%", pct: 70 }],
+    colors: ["#D97706","#F59E0B","#B45309","#92400E"]
+  },
+  {
+    name: "🌀 Cyclone Response", desc: "India's coastline experiences 5–6 major cyclones annually. Eastern coast states face the highest risk from May to November.",
+    steps: ["Monitor IMD warnings — evacuate when Category 3+ alert issued", "Secure or bring in loose outdoor objects", "Seek shelter in a sturdy building — stay away from coast/low areas", "Stay indoors until all-clear given — eye of storm is deceptive", "After storm: check for downed power lines, contaminated water"],
+    stats: [{ label: "Cyclones/Year (avg)", val: "5–6", pct: 75 }, { label: "Warning Accuracy", val: "96%", pct: 96 }, { label: "At-Risk Population", val: "40M+", pct: 80 }, { label: "Early Warning Saves", val: "99%", pct: 99 }],
+    colors: ["#7C3AED","#8B5CF6","#6D28D9","#5B21B6"]
+  },
+  {
+    name: "🔥 Fire Emergency", desc: "Structural fires in educational institutions can spread within 2 minutes. Knowing fire response saves lives in the most critical moments.",
+    steps: ["Activate fire alarm immediately — shout 'FIRE!'", "Evacuate using nearest exit — do NOT use elevators", "Close doors behind you to slow fire spread", "If caught in smoke — stay low, cover mouth, crawl to exit", "Meet at assembly point — never re-enter building for belongings"],
+    stats: [{ label: "Spread Speed", val: "2 min", pct: 95 }, { label: "Key Action Window", val: "90 sec", pct: 90 }, { label: "Deaths Preventable", val: "85%", pct: 85 }, { label: "Exit Distance Max", val: "30m", pct: 60 }],
+    colors: ["#DC2626","#EF4444","#B91C1C","#991B1B"]
+  },
+  {
+    name: "☢️ Chemical Hazard", desc: "Industrial zones near schools pose chemical exposure risks. HAZMAT awareness helps students identify, escape, and report chemical incidents.",
+    steps: ["If outdoors — move upwind and uphill from source immediately", "Do NOT touch, taste, or inhale unknown substances", "Remove contaminated clothing — flush skin with water for 15+ min", "Call emergency services — provide substance description if known", "Seek medical help even if symptoms seem mild"],
+    stats: [{ label: "Response Start", val: "Immediate", pct: 100 }, { label: "Skin Flush Time", val: "15 min", pct: 60 }, { label: "Awareness Impact", val: "+88%", pct: 88 }, { label: "Industrial Zones Near Schools", val: "3000+", pct: 65 }],
+    colors: ["#065F46","#059669","#047857","#10B981"]
+  }
+];
+
+let currentDisaster = 0;
+
+function showDisaster(i) {
+  currentDisaster = i;
+  const tabs = document.querySelectorAll('.dtab');
+  tabs.forEach((t,idx) => t.classList.toggle('active', idx === i));
+  const d = disasters[i];
+  const stepHTML = d.steps.map((s,n) => `<li class="response-steps"><div class="step-num">${n+1}</div><span>${s}</span></li>`).join('');
+  const statsHTML = d.stats.map((s,n) => `
+    <div class="sev-card">
+      <div class="sev-label">${s.label}</div>
+      <div class="sev-value">${s.val}</div>
+      <div class="sev-bar"><div class="sev-fill" style="width:${s.pct}%;background:${d.colors[n]}"></div></div>
+    </div>`).join('');
+  document.getElementById('disasterContent').innerHTML = `
+    <div class="disaster-info">
+      <h3>${d.name}</h3>
+      <p>${d.desc}</p>
+      <ul class="response-steps">${stepHTML}</ul>
+    </div>
+    <div class="severity-grid">${statsHTML}</div>`;
+}
+
+showDisaster(0);
+
+/* Quiz */
+const questions = [
+  { q: "What does 'DROP, COVER, HOLD' refer to?", opts: ["Flood response technique", "Earthquake safety action", "Fire evacuation step", "Chemical hazard protocol"], ans: 1, explain: "DROP to hands and knees, COVER your head under a table, HOLD until shaking stops — the standard earthquake response." },
+  { q: "During a building fire, which floor action is MOST dangerous?", opts: ["Closing doors behind you", "Using the staircase to exit", "Using the elevator to exit faster", "Staying low to avoid smoke"], ans: 2, explain: "Elevators can fail, trap you between floors, or open at the fire floor. Always use stairs during a fire emergency." },
+  { q: "What is India's unified emergency number?", opts: ["108", "100", "112", "1078"], ans: 2, explain: "112 is India's unified emergency number connecting Police, Fire, and Ambulance services — like the international 911." },
+  { q: "In a flood, you should AVOID:", opts: ["Moving to upper floors", "Turning off the main electricity", "Walking through floodwater", "Keeping documents in waterproof bags"], ans: 2, explain: "Floodwater can be electrified, carry pathogens, and have hidden currents strong enough to knock down an adult in just 6 inches." },
+  { q: "Psychological First Aid (PFA) is primarily aimed at:", opts: ["Treating physical injuries on scene", "Providing immediate mental support to disaster survivors", "Training doctors for trauma surgery", "Filing insurance for disaster losses"], ans: 1, explain: "PFA focuses on providing compassionate, human support to reduce distress and connect survivors to further care — no medical degree needed." }
+];
+
+let currentQ = 0, score = 0, answered = false;
+
+function loadQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('qQuestion').textContent = q.q;
+  document.getElementById('qCount').textContent = `${currentQ+1} / ${questions.length}`;
+  document.getElementById('qFill').style.width = `${((currentQ+1)/questions.length)*100}%`;
+  document.getElementById('qOptions').innerHTML = q.opts.map((o,i) =>
+    `<button class="quiz-opt" onclick="selectAnswer(${i})">${o}</button>`).join('');
+  document.getElementById('qFeedback').className = 'quiz-feedback';
+  document.getElementById('qFeedback').textContent = '';
+  document.getElementById('qNext').style.display = 'none';
+  answered = false;
+}
+
+function selectAnswer(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[currentQ];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts[q.ans].classList.add('correct');
+  const fb = document.getElementById('qFeedback');
+  if (i === q.ans) {
+    score++;
+    opts[i].classList.add('correct');
+    fb.textContent = '✓ Correct! ' + q.explain;
+    fb.className = 'quiz-feedback correct show';
+  } else {
+    opts[i].classList.add('wrong');
+    fb.textContent = '✗ Not quite. ' + q.explain;
+    fb.className = 'quiz-feedback wrong show';
+  }
+  const nextBtn = document.getElementById('qNext');
+  nextBtn.style.display = 'block';
+  nextBtn.textContent = currentQ < questions.length-1 ? 'Next →' : 'See Results →';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) {
+    const pct = Math.round((score/questions.length)*100);
+    document.getElementById('quizBox').innerHTML = `
+      <div style="text-align:center;padding:20px 0;">
+        <div style="font-size:56px;margin-bottom:16px;">${pct>=80?'🏆':pct>=60?'📚':'🔄'}</div>
+        <div style="font-family:Syne,sans-serif;font-size:42px;font-weight:800;color:white;">${pct}%</div>
+        <div style="color:rgba(255,255,255,0.5);margin:8px 0 20px;font-size:15px;">You got ${score} of ${questions.length} correct</div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:16px 20px;color:rgba(255,255,255,0.6);font-size:14px;margin-bottom:24px;line-height:1.6;">
+          ${pct>=80 ? 'Excellent! You have strong disaster preparedness awareness. Consider enrolling in the Advanced CERT Program.' : pct>=60 ? 'Good foundation! Explore our core modules to fill the gaps and boost your emergency response skills.' : 'Keep learning! Start with Emergency Response Basics — knowledge saves lives.'}
+        </div>
+        <button class="btn-primary" onclick="currentQ=0;score=0;loadQuestion();" style="margin-right:10px;">Retake Quiz</button>
+        <button class="btn-outline" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">View Courses</button>
+      </div>`;
+    return;
+  }
+  loadQuestion();
+}
+
+loadQuestion();
+
+/* Scroll Reveal */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
