@@ -58,11 +58,11 @@
 
 | Hero Section | Disaster Guides |
 |:---:|:---:|
-| ![Hero](screenshots/hero.png) | ![Guides](screenshots/guides.png) |
+| ![Hero](hero.png) | ![Guides](guides.png) |
 
 | Courses | Quiz |
 |:---:|:---:|
-| ![Courses](screenshots/courses.png) | ![Quiz](screenshots/quiz.png) |
+| ![Courses](courses.png) | ![Quiz](quiz.png) |
 
 </div>
 
